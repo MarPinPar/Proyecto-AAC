@@ -1,0 +1,43 @@
+Funcion SmithMacMillan(A)
+    # A es una matriz de tamaño m × n con entradas enteras
+    
+    Si A es la matriz nula:
+        Retornar A
+
+    # Paso 1: Llevar el menor valor absoluto no nulo a la posición (1,1)
+    Encontrar el elemento no nulo de menor valor absoluto en A
+    Usar permutaciones de filas y columnas para moverlo a A[1][1]
+
+    Mientras A[1][1] no divida a todos los elementos de la primera fila y columna:
+        Para cada elemento A[1][j] (j > 1):
+            Usar el algoritmo de Euclides para hacer divisiones del tipo:
+            A[1][j] ← A[1][j] - q * A[1][1]
+        
+        Para cada elemento A[i][1] (i > 1):
+            Usar Euclides para hacer divisiones del tipo:
+            A[i][1] ← A[i][1] - q * A[1][1]
+    
+    # Ahora A[1][1] divide todos los elementos de la primera fila y columna
+    
+    # Paso 3: Asegurar que A[1][1] divide al resto de elementos de la submatriz
+    Para i desde 2 hasta m:
+        Para j desde 2 hasta n:
+            Mientras A[i][j] no sea divisible por A[1][1]:
+                Sumar fila 1 a fila i: Fila_i ← Fila_i + Fila_1
+                o sumar columna 1 a columna j: Col_j ← Col_j + Col_1
+    
+    # Paso 4: A[1][1] divide todos los elementos, aplicar operaciones de fila/columna
+    Para i desde 2 hasta m:
+        A[i][1] ← A[i][1] - (A[i][1] / A[1][1]) * A[1][1]
+    Para j desde 2 hasta n:
+        A[1][j] ← A[1][j] - (A[1][j] / A[1][1]) * A[1][1]
+
+    # Paso 5: Separar la matriz en la forma A = diag(d1, 0) ⊕ A'
+    Sea A' = submatriz eliminando primera fila y columna
+
+    # Paso 6: Aplicar el algoritmo recursivamente a A'
+    A' ← SmithMacMillan(A')
+
+    # Construir matriz diagonal completa
+    Retornar matriz diagonal con d1 = A[1][1] y A' en bloques
+FinFuncion
