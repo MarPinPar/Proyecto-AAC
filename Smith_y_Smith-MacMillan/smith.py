@@ -143,3 +143,25 @@ def forma_normal_smith(matriz_entrada, dominio=ZZ, verbose=False):
     if verbose:
         print("Cálculo completado.")
     return (s_transformacion, matriz, t_transformacion)
+
+def normalizar_forma_smith(D):
+    from math import gcd
+    from functools import reduce
+
+    # Extraer diagonal significativa
+    diag = [abs(D[i, i]) for i in range(min(D.rows, D.cols)) if D[i, i] != 0]
+    diag.sort()
+
+    # Ajustar para que d_i | d_{i+1}
+    for i in range(len(diag) - 1):
+        g = gcd(diag[i], diag[i+1])
+        if g != diag[i]:
+            diag[i+1] = (diag[i+1] * diag[i]) // g
+            diag[i] = g
+
+    # Reconstruir matriz diagonal
+    D_final = Matrix.zeros(D.rows, D.cols)
+    for i, val in enumerate(diag):
+        D_final[i, i] = val
+
+    return D_final
